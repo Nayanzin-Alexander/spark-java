@@ -1,0 +1,5 @@
+rootProject.name = 'spark-java'
+
+include '01-first-steps'
+include 'common'
+
