@@ -1,0 +1,14 @@
+Welcome to the spark-testing-base wiki!
+
+Project Main Modules:
+
+SharedSparkContext: Provides SparkContext to be used in testing.
+RDDComparisons: Compares two RDDs.
+DataFrameSuiteBase: Checks for dataframe equality.
+DatasetSuiteBase: Checks for dataset equality.
+StreamingSuiteBase: Applies given operation on given input stream and compare with expected output.
+StreamingActionBase: Tests actions that don't have output on input streams.
+RDDGenerator: Generates arbitrary RDDs.
+DataFrameGenerator: Generates arbitrary DataFrames.
+
+DatasetGenerator: Generates arbitrary Datasets.
