@@ -18,9 +18,9 @@ import static java.util.Arrays.asList;
 import static java.util.Comparator.reverseOrder;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class BasicsTest extends SharedJavaSparkContext {
+public class WordCountTest extends SharedJavaSparkContext {
 
-    private static Path testResources = new File(BasicsTest.class.getResource("/ch01basics").getFile()).toPath();
+    private static Path testResources = new File(WordCountTest.class.getResource("/ch01basics").getFile()).toPath();
     private static Path testFilesDir = Paths.get(testResources.toString(), "/testFiles");
     private JavaRDD<String> inputRDD;
     private JavaPairRDD<String, Integer> wordsWithLength;

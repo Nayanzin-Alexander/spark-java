@@ -1,7 +1,8 @@
-package com.nayanzin.sparkjava.unittesting;
+package com.nayanzin.sparkjava.ch01basics;
 
 import com.holdenkarau.spark.testing.JavaRDDComparisons;
 import com.holdenkarau.spark.testing.SharedJavaSparkContext;
+import com.nayanzin.sparkjava.ch01basics.WordCount;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.junit.Before;
@@ -40,7 +41,7 @@ public class UnitTestingTest extends SharedJavaSparkContext implements Serializa
     @Test
     public void getWordsCount() {
         // Run under the test method
-        JavaPairRDD<String, Integer> result = UnitTesting.getWordsCount(inputRdd);
+        JavaPairRDD<String, Integer> result = WordCount.getWordsCount(inputRdd);
 
         // Run the assertions on the result and expected
         JavaRDDComparisons.assertRDDEquals(
