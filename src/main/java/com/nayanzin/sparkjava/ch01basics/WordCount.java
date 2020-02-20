@@ -44,6 +44,7 @@ public class WordCount {
         return new JavaSparkContext(conf);
     }
 
+    @SuppressWarnings("squid:S106")
     private static void checkArguments(String[] args) {
         // Check arguments
         if (args.length < 2) {
