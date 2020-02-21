@@ -79,10 +79,17 @@ public class RDDActionsTest extends SharedJavaSparkContext implements Serializab
         assertThat(dataset.fold(10, Integer::sum)).isEqualTo(1065);
     }
 
-    @SuppressWarnings({"squid:S2699", "EmptyMethod"})
+    @SuppressWarnings("squid:S2699")
     @Test
     public void aggregateTest() {
-        // TODO https://courses.epam.com/courses/course-v1:EPAM+101BD+0819/courseware/72a6f77779194d0bb84fc0e5b1c82c75/ed505574e587429fb000fa69ad881b31/1
+        // TODO continue https://courses.epam.com/courses/course-v1:EPAM+101BD+0819/courseware/72a6f77779194d0bb84fc0e5b1c82c75/ed505574e587429fb000fa69ad881b31/1
+        JavaRDD<Integer> dataset = jsc().parallelize(asList(1, 2, 3, 4, 5, 6), 100);
+        int sumOfAllEvenNumbers = dataset.aggregate(
+                0,  // initial value for every accumulator
+                (accum, val) -> (val & 1) == 0 ? accum + val : accum,   // reduce each partition
+                Integer::sum    // reduce reduced partitions
+        );
+        assertThat(sumOfAllEvenNumbers).isEqualTo(12);
     }
 
 }
