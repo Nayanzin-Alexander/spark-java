@@ -10,8 +10,10 @@ import java.util.Arrays;
 
 /*
 ## Usage:
+./gradlew build
+
 INPUT=src/test/resources/ch01basics/testData.txt
-OUTPUT=src/test/resources/ch01basics/result/
+OUTPUT=manual-run-results/wordcount/
 rm -r $OUTPUT
 spark-submit    \
     --class com.nayanzin.sparkjava.ch01basics.WordCount \
