@@ -8,30 +8,25 @@ import org.junit.Before;
 import org.junit.Test;
 import scala.Tuple2;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static com.nayanzin.sparkjava.ch01basics.TestUtils.deleteFiles;
+import static com.nayanzin.sparkjava.ch01basics.TestUtils.getTestResource;
 import static java.util.Arrays.asList;
-import static java.util.Comparator.reverseOrder;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class WordCountTest extends SharedJavaSparkContext {
 
-    private static final Path testResources = new File(WordCountTest.class.getResource("/ch01basics").getFile()).toPath();
+    private static final Path testResources = getTestResource("/ch01basics");
     private static final Path testFilesDir = Paths.get(testResources.toString(), "/testFiles");
     private JavaRDD<String> inputRDD;
     private JavaPairRDD<String, Integer> wordsWithLength;
 
     @AfterClass
     public static void cleanUpTestFiles() throws IOException {
-        int filesDeleted = Files.walk(testFilesDir)
-                .sorted(reverseOrder())
-                .map(Path::toFile)
-                .mapToInt(file -> file.delete() ? 1 : 0)
-                .sum();
+        int filesDeleted = deleteFiles(testFilesDir);
         assertThat(filesDeleted).as("Files deleted").isGreaterThan(2);
     }
 

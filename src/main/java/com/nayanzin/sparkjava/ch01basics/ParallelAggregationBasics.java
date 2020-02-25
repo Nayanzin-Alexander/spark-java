@@ -20,6 +20,19 @@ public class ParallelAggregationBasics {
     private static final Random RAND = new Random(47);
     private static long timer;
 
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        long[] results = new long[5];
+        List<Integer> workload = generateWorkload(10_000_000);
+        results[0] = runSumViaLoopUnboxed(workload);
+        results[1] = runSumViaLoopUnboxedInParallel(workload, Runtime.getRuntime().availableProcessors() + 1);
+        results[2] = runSumViaLoopBoxed(workload);
+        results[3] = runSumViaStream(workload);
+        results[4] = runSumViaStreamInParallel(workload);
+        if (Arrays.stream(results).distinct().count() != 1) {
+            throw new AssertionError(format("Results must be the same: %s", Arrays.toString(results)));
+        }
+    }
+
     private static List<Integer> generateWorkload(@SuppressWarnings("SameParameterValue") int listSize) {
         startTimer();
         List<Integer> result = IntStream.range(0, listSize)
@@ -38,21 +51,6 @@ public class ParallelAggregationBasics {
 
     private static void startTimer() {
         timer = System.nanoTime();
-    }
-
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
-        long[] results = new long[5];
-        List<Integer> workload = generateWorkload(10_000_000);
-
-        results[0] = runSumViaLoopUnboxed(workload);
-        results[1] = runSumViaLoopUnboxedInParallel(workload, Runtime.getRuntime().availableProcessors() + 1);
-        results[2] = runSumViaLoopBoxed(workload);
-        results[3] = runSumViaStream(workload);
-        results[4] = runSumViaStreamInParallel(workload);
-
-        if (Arrays.stream(results).distinct().count() != 1) {
-            throw new AssertionError(format("Results must be the same: %s", Arrays.toString(results)));
-        }
     }
 
     private static long runSumViaLoopUnboxedInParallel(List<Integer> workload, int nThreads) throws ExecutionException, InterruptedException {
