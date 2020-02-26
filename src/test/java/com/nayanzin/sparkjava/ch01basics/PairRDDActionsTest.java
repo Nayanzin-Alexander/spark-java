@@ -1,215 +1,67 @@
 package com.nayanzin.sparkjava.ch01basics;
 
-import com.holdenkarau.spark.testing.JavaRDDComparisons;
 import com.holdenkarau.spark.testing.SharedJavaSparkContext;
 import org.apache.spark.api.java.JavaPairRDD;
-import org.apache.spark.api.java.JavaRDD;
 import org.junit.Test;
 import scala.Serializable;
 import scala.Tuple2;
-import scala.reflect.ClassTag;
-import scala.reflect.ClassTag$;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import static java.util.Arrays.asList;
-import static org.apache.spark.api.java.JavaPairRDD.toRDD;
-import static org.apache.spark.api.java.JavaRDD.fromRDD;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.entry;
 
 public class PairRDDActionsTest extends SharedJavaSparkContext implements Serializable {
 
     @Test
-    public void mapValuesTest() {
+    public void countByKeyTest() {
         JavaPairRDD<String, Integer> dataset = jsc().parallelizePairs(asList(
                 new Tuple2<>("A", 1),
+                new Tuple2<>("A", 11),
+                new Tuple2<>("A", 111),
                 new Tuple2<>("B", 2),
+                new Tuple2<>("B", 22),
                 new Tuple2<>("C", 3)));
-        JavaPairRDD<String, Integer> actual = dataset.mapValues(value -> (int) Math.pow(value, 3));
-        JavaPairRDD<String, Integer> expected = jsc().parallelizePairs(asList(
-                new Tuple2<>("A", 1),
-                new Tuple2<>("B", 8),
-                new Tuple2<>("C", 27)));
-        ClassTag<Tuple2<String, Integer>> tag = ClassTag$.MODULE$.apply(Tuple2.class);
-        JavaRDDComparisons.assertRDDEquals(
-                fromRDD(toRDD(actual), tag),
-                fromRDD(toRDD(expected), tag));
+        Map<String, Long> countByKeyMap = dataset.countByKey();
+        assertThat(countByKeyMap).hasSize(3);
+        assertThat(countByKeyMap).containsExactly(
+                entry("A", 3L),
+                entry("B", 2L),
+                entry("C", 1L));
     }
 
     @Test
-    public void flatMapValuesTest() {
-        JavaPairRDD<String, String> dataset = jsc().parallelizePairs(asList(
-                new Tuple2<>("Set1", "a b c d e"),
-                new Tuple2<>("Set2", "s w x y z")));
-        JavaPairRDD<String, String> actual = dataset
-                .flatMapValues(value -> Arrays.asList(value.split(" ")));
-        JavaPairRDD<String, String> expected = jsc().parallelizePairs(asList(
-                new Tuple2<>("Set1", "a"),
-                new Tuple2<>("Set1", "b"),
-                new Tuple2<>("Set1", "c"),
-                new Tuple2<>("Set1", "d"),
-                new Tuple2<>("Set1", "e"),
-                new Tuple2<>("Set2", "s"),
-                new Tuple2<>("Set2", "w"),
-                new Tuple2<>("Set2", "x"),
-                new Tuple2<>("Set2", "y"),
-                new Tuple2<>("Set2", "z")));
-        ClassTag<Tuple2<String, String>> tag = ClassTag$.MODULE$.apply(Tuple2.class);
-        JavaRDDComparisons.assertRDDEquals(
-                fromRDD(toRDD(actual), tag),
-                fromRDD(toRDD(expected), tag));
-    }
-
-    @Test
-    public void keysTest() {
+    public void collectAsMapTest() {
         JavaPairRDD<String, Integer> dataset = jsc().parallelizePairs(asList(
                 new Tuple2<>("A", 1),
+                new Tuple2<>("A", 11),
+                new Tuple2<>("A", 111),
                 new Tuple2<>("B", 2),
+                new Tuple2<>("B", 22),
                 new Tuple2<>("C", 3)));
-        JavaRDD<String> actualKeys = dataset.keys();
-        JavaRDD<String> expectedKeys = jsc().parallelize(asList("A", "B", "C"));
-        JavaRDDComparisons.assertRDDEquals(actualKeys, expectedKeys);
+        Map<String, Integer> collectedAsMap = dataset.collectAsMap();
+
+        assertThat(collectedAsMap).containsOnly(
+                entry("A", 111),
+                entry("B", 22),
+                entry("C", 3));
     }
 
     @Test
-    public void valuesTest() {
+    public void lookupTest() {
         JavaPairRDD<String, Integer> dataset = jsc().parallelizePairs(asList(
                 new Tuple2<>("A", 1),
+                new Tuple2<>("A", 11),
+                new Tuple2<>("A", 111),
                 new Tuple2<>("B", 2),
+                new Tuple2<>("B", 22),
                 new Tuple2<>("C", 3)));
-        JavaRDD<Integer> actualValues = dataset.values();
-        JavaRDD<Integer> expectedKeys = jsc().parallelize(asList(1, 2, 3));
-        JavaRDDComparisons.assertRDDEquals(actualValues, expectedKeys);
+        List<Integer> lookupResult = dataset.lookup("B");
+        assertThat(lookupResult).containsExactlyInAnyOrder(2, 22);
     }
 
-    @Test
-    public void groupByKey() {
-        JavaPairRDD<Integer, Long> dataset = jsc().parallelizePairs(asList(
-                new Tuple2<>(1, 10L),
-                new Tuple2<>(1, 100L),
-                new Tuple2<>(2, 55L),
-                new Tuple2<>(2, 33L),
-                new Tuple2<>(2, 10L)));
-        JavaPairRDD<Integer, Iterable<Long>> actualGroupedByKey = dataset.groupByKey();
-        Map<Integer, Iterable<Long>> groupedByKeyMap = actualGroupedByKey.collectAsMap();
-        assertThat(groupedByKeyMap).hasSize(2);
-        assertThat(groupedByKeyMap.get(1)).containsExactlyInAnyOrder(10L, 100L);
-        assertThat(groupedByKeyMap.get(2)).containsExactlyInAnyOrder(55L, 33L, 10L);
-    }
 
-    @Test
-    public void reduceByKeyTest() {
-        JavaPairRDD<Integer, Long> dataset = jsc().parallelizePairs(asList(
-                new Tuple2<>(1, 5L),
-                new Tuple2<>(1, 5L),
-                new Tuple2<>(2, 100L),
-                new Tuple2<>(2, 100L)));
-        JavaPairRDD<Integer, Long> sumByKey = dataset.reduceByKey(Long::sum);
-        JavaPairRDD<Integer, Long> expected = jsc().parallelizePairs(asList(
-                new Tuple2<>(1, 10L),
-                new Tuple2<>(2, 200L)));
-        ClassTag<Tuple2<Integer, Long>> tag = ClassTag$.MODULE$.apply(Tuple2.class);
-        JavaRDDComparisons.assertRDDEquals(
-                fromRDD(toRDD(sumByKey), tag),
-                fromRDD(toRDD(expected), tag));
-    }
 
-    @Test
-    public void aggregateByKeyTest() {
-        JavaPairRDD<String, Integer> dataset = jsc().parallelizePairs(asList(
-                new Tuple2<>("Key1", 1),
-                new Tuple2<>("Key1", 2),
-                new Tuple2<>("Key1", 3),
-                new Tuple2<>("Key1", 4),
-                new Tuple2<>("Key1", 5),
-                new Tuple2<>("Key2", 1),
-                new Tuple2<>("Key2", 3),
-                new Tuple2<>("Key2", 5),
-                new Tuple2<>("Key2", 7),
-                new Tuple2<>("Key2", 9)));
-        JavaPairRDD<String, Integer> actualCountOfOddNumbersPerKey = dataset.aggregateByKey(
-                0,
-                (accum1, val) -> (val & 1) == 1 ? ++accum1 : accum1,
-                Integer::sum);
-        JavaPairRDD<String, Integer> expectedCountOfOddNumbersPerKey = jsc().parallelizePairs(asList(
-                new Tuple2<>("Key1", 3),
-                new Tuple2<>("Key2", 5)));
-        ClassTag<Tuple2<String, Integer>> tag = ClassTag$.MODULE$.apply(Tuple2.class);
-        JavaRDDComparisons.assertRDDEquals(
-                fromRDD(toRDD(actualCountOfOddNumbersPerKey), tag),
-                fromRDD(toRDD(expectedCountOfOddNumbersPerKey), tag));
-    }
-
-    @Test
-    public void subtractByKeyTest() {
-        JavaPairRDD<Integer, Long> dataset = jsc().parallelizePairs(asList(
-                new Tuple2<>(null, 1L),
-                new Tuple2<>(1, 10L),
-                new Tuple2<>(1, 100L),
-                new Tuple2<>(2, 55L),
-                new Tuple2<>(3, 33L),
-                new Tuple2<>(4, 10L)));
-        JavaPairRDD<Integer, String> keysToSubtract = jsc().parallelizePairs(asList(
-                new Tuple2<>(null, "c"),
-                new Tuple2<>(1, "a"),
-                new Tuple2<>(4, "b"),
-                new Tuple2<>(5, "c")));
-        JavaPairRDD<Integer, Long> actualAfterSubtractByKey = dataset
-                .subtractByKey(keysToSubtract);
-        JavaPairRDD<Integer, Long> expectedAfterSubtractByKey = jsc().parallelizePairs(asList(
-                new Tuple2<>(2, 55L),
-                new Tuple2<>(3, 33L)));
-        ClassTag<Tuple2<Integer, Long>> tag = ClassTag$.MODULE$.apply(Tuple2.class);
-        JavaRDDComparisons.assertRDDEquals(
-                fromRDD(toRDD(actualAfterSubtractByKey), tag),
-                fromRDD(toRDD(expectedAfterSubtractByKey), tag));
-    }
-
-    @Test
-    public void coGroupTest() {
-        JavaPairRDD<Integer, Long> dataset1 = jsc().parallelizePairs(asList(
-                new Tuple2<>(null, 0L),
-                new Tuple2<>(1, 1L),
-                new Tuple2<>(1, 1L),
-                new Tuple2<>(2, 2L)));
-        JavaPairRDD<Integer, Long> dataset2 = jsc().parallelizePairs(asList(
-                new Tuple2<>(null, 0L),
-                new Tuple2<>(1, 11L),
-                new Tuple2<>(4, 44L),
-                new Tuple2<>(5, 55L)));
-        JavaPairRDD<Integer, Tuple2<Iterable<Long>, Iterable<Long>>> actualAfterCoGroup = dataset1.cogroup(dataset2);
-        Map<Integer, Tuple2<Iterable<Long>, Iterable<Long>>> actualAfterCoGroupMap = actualAfterCoGroup.collectAsMap();
-        assertThat(actualAfterCoGroupMap).hasSize(5);
-        assertThat(actualAfterCoGroupMap.get(null)._1).containsExactlyInAnyOrder(0L);
-        assertThat(actualAfterCoGroupMap.get(null)._2).containsExactlyInAnyOrder(0L);
-        assertThat(actualAfterCoGroupMap.get(1)._1).containsExactlyInAnyOrder(1L, 1L);
-        assertThat(actualAfterCoGroupMap.get(1)._2).containsExactlyInAnyOrder(11L);
-        assertThat(actualAfterCoGroupMap.get(2)._1).containsExactlyInAnyOrder(2L);
-        assertThat(actualAfterCoGroupMap.get(2)._2).isEmpty();
-        assertThat(actualAfterCoGroupMap.get(4)._1).isEmpty();
-        assertThat(actualAfterCoGroupMap.get(4)._2).containsExactlyInAnyOrder(44L);
-        assertThat(actualAfterCoGroupMap.get(5)._1).isEmpty();
-        assertThat(actualAfterCoGroupMap.get(5)._2).containsExactlyInAnyOrder(55L);
-    }
-
-    @Test
-    public void joinTest() {
-        JavaPairRDD<Integer, Long> dataset1 = jsc().parallelizePairs(asList(
-                new Tuple2<>(0, 0L),
-                new Tuple2<>(1, 1L),
-                new Tuple2<>(1, 1L),
-                new Tuple2<>(2, 2L)));
-        JavaPairRDD<Integer, String> dataset2 = jsc().parallelizePairs(asList(
-                new Tuple2<>(1, "a"),
-                new Tuple2<>(1, "b"),
-                new Tuple2<>(2, "c"),
-                new Tuple2<>(3, "d"),
-                new Tuple2<>(3, "e")));
-        List<Tuple2<Integer, Tuple2<Long, String>>> innerJoinedRddMap = dataset1.join(dataset2).collect();
-        assertThat(innerJoinedRddMap).hasSize(2);
-        // TODO continue assertions
-        // TODO continue video https://courses.epam.com/courses/course-v1:EPAM+101BD+0819/courseware/72a6f77779194d0bb84fc0e5b1c82c75/5c2bfe09d2c240cba69372c6d56c48b2/1
-    }
 }
