@@ -12,6 +12,9 @@ import java.util.Arrays;
 ## Usage:
 ./gradlew build
 
+## For Spark debugging
+export SPARK_SUBMIT_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=7777
+
 INPUT=src/test/resources/ch01basics/testData.txt
 OUTPUT=manual-run-results/wordcount/
 rm -r $OUTPUT

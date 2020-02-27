@@ -12,3 +12,9 @@ Horton Hadoop Sandbox
 https://www.cloudera.com/downloads/hortonworks-sandbox/hdp.html   
 https://www.cloudera.com/tutorials/learning-the-ropes-of-the-hdp-sandbox.html   
 https://www.cloudera.com/tutorials/getting-started-with-hdp-sandbox.html   
+
+Install Hadoop on ubuntu   
+https://linuxconfig.org/how-to-install-hadoop-on-ubuntu-18-04-bionic-beaver-linux
+
+Debug Spark application   
+export SPARK_SUBMIT_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=7777
