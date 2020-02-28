@@ -1,4 +1,4 @@
-package com.nayanzin.sparkjava.ch01basics;
+package com.nayanzin.sparkjava.util;
 
 import java.io.File;
 import java.io.IOException;

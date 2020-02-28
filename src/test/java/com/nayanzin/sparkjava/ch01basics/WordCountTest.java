@@ -12,8 +12,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static com.nayanzin.sparkjava.ch01basics.TestUtils.deleteFiles;
-import static com.nayanzin.sparkjava.ch01basics.TestUtils.getTestResource;
+import static com.nayanzin.sparkjava.util.TestUtils.deleteFiles;
+import static com.nayanzin.sparkjava.util.TestUtils.getTestResource;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
