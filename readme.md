@@ -18,3 +18,6 @@ https://linuxconfig.org/how-to-install-hadoop-on-ubuntu-18-04-bionic-beaver-linu
 
 Debug Spark application   
 export SPARK_SUBMIT_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=7777
+
+Spark CSV features   
+https://github.com/databricks/spark-csv#features

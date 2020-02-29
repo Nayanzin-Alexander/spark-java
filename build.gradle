@@ -13,6 +13,8 @@ dependencies {
     compile 'org.apache.spark:spark-core_2.11:2.4.0'
     compile 'org.apache.spark:spark-sql_2.11:2.4.0'
     compile 'org.apache.spark:spark-hive_2.11:2.4.0'
+    compileOnly('org.projectlombok:lombok:1.18.12')
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
     testCompile 'junit:junit:4.12'
     testCompile("org.assertj:assertj-core:3.11.1")
     testCompile 'com.holdenkarau:spark-testing-base_2.11:2.4.0_0.11.0'
