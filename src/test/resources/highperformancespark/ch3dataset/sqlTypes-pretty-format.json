@@ -1,0 +1,38 @@
+{
+    "Byte": 1,
+    "Short": 1,
+    "Int": 1,
+    "Long": 1,
+    "BigDecimal": 2123456.78910,
+    "Float": 123.456,
+    "Double": 123.456,
+    "ByteArray": "AQIDBA==",
+    "Boolean": true,
+    "Date": "2020-03-12",
+    "Timestamp": 1584078904,
+    "String": "Some text",
+    "ArrayOfCustomTypes": [
+        {
+            "Byte1": 1,
+            "Byte2": 2
+        },
+        {
+            "Byte1": 1,
+            "Byte2": 2
+        }
+    ],
+    "MapOfCustomTypes": {
+        "key1": {
+            "Byte1": 1,
+            "Byte2": 2
+        },
+        "key2": {
+            "Byte1": 1,
+            "Byte2": 2
+        }
+    },
+    "CaseClass": {
+        "Byte1": 1,
+        "Byte2": 2
+    }
+}

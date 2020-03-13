@@ -3,9 +3,7 @@ package com.nayanzin.highperformancespark.ch3dataset;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
-import org.apache.spark.sql.types.DecimalType;
-import org.apache.spark.sql.types.StructField;
-import org.apache.spark.sql.types.StructType;
+import org.apache.spark.sql.types.*;
 
 import static com.nayanzin.highperformancespark.Factory.buildSparkSession;
 import static java.util.Arrays.asList;
@@ -22,6 +20,10 @@ spark-submit    \
     $INPUT
  */
 public class BasicSparkSqlTypes {
+
+    private static final StructType nestedStruct = createStructType(asList(
+            createStructField("Byte1", ByteType, true),
+            createStructField("Byte2", ByteType, true)));
 
     // 1-byte signed integers (-128, 127)
     public static final StructField BYTE_FIELD = createStructField("Byte", ByteType, true);
@@ -54,6 +56,28 @@ public class BasicSparkSqlTypes {
      * </code>
      */
     public static final StructField BYTE_ARRAY_FIELD = createStructField("ByteArray", BinaryType, true);
+
+    // true/false
+    public static final StructField BOOLEAN_FIELD = createStructField("Boolean", BooleanType, true);
+
+    // Date without time information. "yyyy-MM-dd". Internally is represented as the number of days from 1970-01-01
+    public static final StructField DATE_FIELD = createStructField("Date", DateType, true);
+
+    // Date with time information. (Second precision). Represents java.sql.Timestamp values WITH SECONDS PRECISION.
+    public static final StructField TIMESTAMP_FIELD = createStructField("Timestamp", TimestampType, true);
+
+    // Character string values (stored as UTF8)
+    public static final StructField STRING_FIELD = createStructField("String", StringType, true);
+
+    // Array of single type of element, containsNull true if any null elements.
+    public static final StructField ARRAY_OF_CUSTOM_TYPES_FIELD = createStructField("ArrayOfCustomTypes", ArrayType.apply(nestedStruct, true), true);
+
+    // Key/value map, valueContainsNull if any values are null
+    public static final StructField MAP_OF_CUSTOM_TYPES_FIELD = createStructField("MapOfCustomTypes", MapType.apply(StringType, nestedStruct), true);
+
+    // Named fields of possible heterogeneous types, similar to a case class or JavaBean.
+    public static final StructField CASE_CLASS_FIELD = createStructField("CaseClass", nestedStruct, true);
+
     private static final StructType allSparkTypesSchema = createStructType(asList(
             BYTE_FIELD,
             SHORT_FIELD,
@@ -62,14 +86,14 @@ public class BasicSparkSqlTypes {
             BIG_DECIMAL_FIELD,
             FLOAT_FIELD,
             DOUBLE_FIELD,
-            BYTE_ARRAY_FIELD
-//            createStructField("Boolean", BooleanType, true),
-//            createStructField("Date", DateType, true),
-//            createStructField("Timestamp", TimestampType, true),
-//            createStructField("String", StringType, true),
-//            createStructField("ArrayOfCustomTypes", ArrayType.apply(customType, true), true),
-//            createStructField("MapOfCustomTypes", MapType.apply(LongType, customType), true),
-//            createStructField("CaseClass", customType, true)
+            BYTE_ARRAY_FIELD,
+            BOOLEAN_FIELD,
+            DATE_FIELD,
+            TIMESTAMP_FIELD,
+            STRING_FIELD,
+            ARRAY_OF_CUSTOM_TYPES_FIELD,
+            MAP_OF_CUSTOM_TYPES_FIELD,
+            CASE_CLASS_FIELD
     ));
 
     public static void main(String[] args) {
@@ -79,6 +103,6 @@ public class BasicSparkSqlTypes {
                 .schema(allSparkTypesSchema)
                 .json(args[0]);
         json.printSchema();
-        json.show();
+        json.show(10, 300);
     }
 }
