@@ -4,9 +4,7 @@ import com.holdenkarau.spark.testing.SharedJavaSparkContext;
 import org.apache.spark.Partition;
 import org.apache.spark.Partitioner;
 import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.Optional;
 import org.junit.Test;
-import scala.Tuple2;
 
 import java.io.Serializable;
 import java.nio.file.Path;

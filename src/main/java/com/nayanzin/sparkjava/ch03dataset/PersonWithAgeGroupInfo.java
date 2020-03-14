@@ -18,6 +18,7 @@ public class PersonWithAgeGroupInfo {
     private BigDecimal salary;
     private String ageGroupInfo;
 
+    @SuppressWarnings("unused")
     @EqualsAndHashCode.Include
     private Object salaryForEqHC() {
         return salary.stripTrailingZeros();

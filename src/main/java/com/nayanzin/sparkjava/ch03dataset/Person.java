@@ -18,6 +18,7 @@ public class Person implements Serializable {
     @EqualsAndHashCode.Exclude
     private BigDecimal salary;
 
+    @SuppressWarnings("unused")
     @EqualsAndHashCode.Include
     private Object salaryForEqHC() {
         return salary.stripTrailingZeros();
