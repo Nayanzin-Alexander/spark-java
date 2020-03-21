@@ -5,7 +5,7 @@ import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.*;
 
-import static com.nayanzin.highperformancespark.Factory.buildSparkSession;
+import static com.nayanzin.highperformancespark.Utils.buildSparkSession;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyMap;
 import static org.apache.spark.sql.types.DataTypes.*;

@@ -13,7 +13,8 @@ import scala.Serializable;
 
 import java.util.Collections;
 
-import static com.nayanzin.highperformancespark.Factory.buildSparkSession;
+import static com.nayanzin.highperformancespark.Utils.buildSparkSession;
+import static com.nayanzin.highperformancespark.Utils.setStageName;
 
 /*
 Usage:
@@ -49,11 +50,17 @@ public class CoreRddJoin implements Serializable {
         JoinTransformer joinTransformer = new JoinTransformer();
 
         // Read input csv files
-        JavaRDD<String> addressesCsv = sc.textFile(inputAddressCsv, 100).toJavaRDD();
-        JavaRDD<String> scoresCsv = sc.textFile(inputScoreCsv, 100).toJavaRDD();
+        setStageName(sc, "Read input scores csv files");
+        JavaRDD<String> addressesCsv = sc.textFile(inputAddressCsv, 1).toJavaRDD();
+
+        setStageName(sc, "Read input scores csv files");
+        JavaRDD<String> scoresCsv = sc.textFile(inputScoreCsv, 1).toJavaRDD();
 
         // Transform csv to Dto
+        setStageName(sc, "Transform addresses to Dto");
         JavaPairRDD<Long, PandaAddress> addresses = csvTransformer.getAddresses(addressesCsv);
+
+        setStageName(sc, "Transform scores to Dto");
         JavaPairRDD<Long, PandaScore> scores = csvTransformer.getScores(scoresCsv);
 
         // Join data
@@ -63,6 +70,7 @@ public class CoreRddJoin implements Serializable {
                         joinTransformer.reduceJoin(addresses, scores);
 
         // Save result
+        setStageName(sc, "Join, save");
         addressesAndHighestScores
                 .coalesce(1)
                 .saveAsTextFile(outputAddressWithHighestScore);

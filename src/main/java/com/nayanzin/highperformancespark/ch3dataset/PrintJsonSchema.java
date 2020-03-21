@@ -4,7 +4,7 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 
-import static com.nayanzin.highperformancespark.Factory.buildSparkSession;
+import static com.nayanzin.highperformancespark.Utils.buildSparkSession;
 import static java.util.Collections.emptyMap;
 
 /*

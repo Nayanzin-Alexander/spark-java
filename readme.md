@@ -21,3 +21,7 @@ export SPARK_SUBMIT_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,a
 
 Spark CSV features   
 https://github.com/databricks/spark-csv#features
+
+Spark History Server and monitoring jobs performance
+https://luminousmen.com/post/spark-history-server-and-monitoring-jobs-performance   
+https://stackoverflow.com/questions/39123314/how-to-add-custom-description-to-spark-job-for-displaying-in-spark-web-ui
