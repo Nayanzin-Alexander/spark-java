@@ -6,6 +6,8 @@ import org.apache.spark.sql.SparkSession;
 
 import java.util.Map;
 
+import static java.util.Objects.nonNull;
+
 public final class Utils {
 
     public static final String CALL_SITE_SHORT = "callSite.short";
@@ -15,11 +17,13 @@ public final class Utils {
     public static SparkSession buildSparkSession(String appName, Map<String, String> sparkConf) {
         SparkConf conf = new SparkConf();
         sparkConf.forEach(conf::set);
+        if (nonNull(appName)) {
+            conf.set("spark.app.name", appName);
+        }
         return SparkSession
                 .builder()
                 .enableHiveSupport()
                 .config(conf)
-                .appName(appName)
                 .getOrCreate();
     }
 

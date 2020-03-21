@@ -20,13 +20,14 @@ import static com.nayanzin.highperformancespark.Utils.setStageName;
 Usage:
 ./gradlew build
 
-INPUT_ADDRESS=/home/fin/MyProjects/spark-java/src/test/resources/highperformancespark/ch4joins/pandas_addresses.csv
-INPUT_SCORES=/home/fin/MyProjects/spark-java/src/test/resources/highperformancespark/ch4joins/panda_scores.csv
+JOIN_METHOD=reduceJoin1
+INPUT_ADDRESS=/home/fin/MyProjects/spark-java/src/test/resources/highperformancespark/ch4joins/addresses_35mb.csv
+INPUT_SCORES=/home/fin/MyProjects/spark-java/src/test/resources/highperformancespark/ch4joins/scores_300mb.csv
 OUTPUT=/home/fin/MyProjects/spark-java/manual-run-results/CoreRddJoin/
-JOIN_METHOD=joinReduce
 rm -r $OUTPUT
 spark-submit    \
-    --total-executor-cores 100  \
+    --name $JOIN_METHOD \
+    --total-executor-cores 4  \
     --class com.nayanzin.highperformancespark.ch4joins.CoreRddJoin  \
     build/libs/spark-java-1.0-SNAPSHOT.jar  \
     $INPUT_ADDRESS $INPUT_SCORES $OUTPUT $JOIN_METHOD
@@ -42,7 +43,7 @@ public class CoreRddJoin implements Serializable {
         String joinMethod = args[3];
 
         // Create spark session
-        SparkSession spark = buildSparkSession("CoreRddJoin", Collections.emptyMap());
+        SparkSession spark = buildSparkSession(null, Collections.emptyMap());
         SparkContext sc = spark.sparkContext();
 
         // Create service objects
