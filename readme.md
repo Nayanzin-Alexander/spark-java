@@ -16,6 +16,13 @@ https://www.cloudera.com/tutorials/getting-started-with-hdp-sandbox.html
 Install Hadoop on ubuntu   
 https://linuxconfig.org/how-to-install-hadoop-on-ubuntu-18-04-bionic-beaver-linux
 
+Submitting application to Spark
+https://spark.apache.org/docs/latest/submitting-applications.html
+https://linuxize.com/post/linux-nohup-command/
+
+Spark properties
+http://spark.apache.org/docs/latest/configuration.html#application-properties
+
 Debug Spark application   
 export SPARK_SUBMIT_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=7777
 

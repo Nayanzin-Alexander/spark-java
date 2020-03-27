@@ -24,16 +24,4 @@ public class JoinTransformer implements Serializable {
                 })
                 .map(t -> t._2);
     }
-
-    public JavaRDD<PandaCongratsDto> reduceJoin(JavaPairRDD<Long, PandaAddress> addresses, JavaPairRDD<Long, PandaScore> scores) {
-        return scores
-                .reduceByKey((t1, t2) -> {
-                    if (isNull(t1.getScore())) {
-                        return t2;
-                    }
-                    return t1.getScore().compareTo(t2.getScore()) > 0 ? t1 : t2;
-                })
-                .join(addresses)
-                .map(t -> Mappers.addressAndScoreToPandaCongratsDto(t._2._2, t._2._1));
-    }
 }

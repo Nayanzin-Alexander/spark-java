@@ -1,16 +1,18 @@
 package com.nayanzin.highperformancespark;
 
 import org.apache.spark.SparkConf;
-import org.apache.spark.SparkContext;
+import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.SparkSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
 import static java.util.Objects.nonNull;
 
 public final class Utils {
-
-    public static final String CALL_SITE_SHORT = "callSite.short";
+    private static final Logger LOG = LoggerFactory.getLogger(Utils.class);
+    private static final String CALL_SITE_SHORT = "callSite.short";
 
     private Utils() {}
 
@@ -27,7 +29,14 @@ public final class Utils {
                 .getOrCreate();
     }
 
-    public static void setStageName(SparkContext sc, String name) {
+    public static void setStageName(JavaSparkContext sc, String name) {
         sc.setLocalProperty(CALL_SITE_SHORT, name);
+    }
+
+    public static void checkArgs(String[] args, int expectedNumberOfArgs) {
+        if (args.length != expectedNumberOfArgs) {
+            LOG.error("Wrong arguments number. Must be {} but provided: {}", expectedNumberOfArgs, args.length);
+            System.exit(-1);
+        }
     }
 }

@@ -2,56 +2,53 @@ package com.nayanzin.highperformancespark.ch4joins;
 
 import com.nayanzin.highperformancespark.ch4joins.filter.Filters;
 import com.nayanzin.highperformancespark.ch4joins.mapper.Mappers;
-import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaPairRDD;
+import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.SparkSession;
 import scala.Serializable;
 import scala.Tuple2;
 
 import java.util.Collections;
 
-import static com.nayanzin.highperformancespark.Utils.buildSparkSession;
-import static com.nayanzin.highperformancespark.Utils.setStageName;
+import static com.nayanzin.highperformancespark.Utils.*;
 
 /*
 Usage:
-./gradlew build
-
-INPUT_ADDRESS=/home/fin/MyProjects/spark-java/src/test/resources/highperformancespark/ch4joins/addresses_35mb.csv
-INPUT_SCORES=/home/fin/MyProjects/spark-java/src/test/resources/highperformancespark/ch4joins/scores_300mb.csv
-OUTPUT=/home/fin/MyProjects/spark-java/manual-run-results/CoreRddJoin/
+INPUT_ADDRESS=src/test/resources/highperformancespark/ch4joins/addresses_70mb.csv
+INPUT_SCORES=src/test/resources/highperformancespark/ch4joins/scores_300mb.csv
+OUTPUT=manual-run-results/CoreRddJoin/
 rm -r $OUTPUT
-spark-submit    \
-    --name Reduce-Join \
-    --total-executor-cores 4  \
-    --class com.nayanzin.highperformancespark.ch4joins.Join  \
+spark-submit \
+    --master    local[4] \
+    --name      ShuffleJoinWithPreProcessingBeforeJoin \
+    --class     com.nayanzin.highperformancespark.ch4joins.ReduceShuffleJoin  \
     build/libs/spark-java-1.0-SNAPSHOT.jar  \
-    $INPUT_ADDRESS $INPUT_SCORES $OUTPUT
+    $INPUT_ADDRESS \
+    $INPUT_SCORES \
+    $OUTPUT
  */
-public class Join implements Serializable {
+public class ReduceShuffleJoin implements Serializable {
 
     public static void main(String[] args) {
         // Parse arguments
-        checkArgs(args);
+        checkArgs(args, 3);
         String inputAddressCsv = args[0];
         String inputScoreCsv = args[1];
         String outputAddressWithHighestScore = args[2];
 
         // Create spark session
         SparkSession spark = buildSparkSession(null, Collections.emptyMap());
-        SparkContext sc = spark.sparkContext();
+        JavaSparkContext sc = JavaSparkContext.fromSparkContext(spark.sparkContext());
 
         setStageName(sc, "Read input address csv files");
         JavaPairRDD<Long, Tuple2<String, String>> idNameAddress = sc
-                .textFile(inputAddressCsv, 1)
-                .toJavaRDD()
+                .textFile(inputAddressCsv, 10)
                 .mapToPair(Mappers::csvLineToIdNameAddressOrNull)
                 .filter(Filters::filterIdNameAddress);
 
         setStageName(sc, "Read input score files");
         JavaPairRDD<Long, Double> idScore = sc
-                .textFile(inputScoreCsv, 1)
-                .toJavaRDD()
+                .textFile(inputScoreCsv, 10)
                 .mapToPair(Mappers::csvLineToIdScore)
                 .filter(Filters::filterIdScore);
 
@@ -61,12 +58,5 @@ public class Join implements Serializable {
                 .join(idNameAddress)
                 .map(Mappers::idMaxScoreNameAddressToCsvLine)
                 .saveAsTextFile(outputAddressWithHighestScore);
-    }
-
-
-    private static void checkArgs(String[] args) {
-        if (args.length != 3) {
-            System.exit(-1);
-        }
     }
 }

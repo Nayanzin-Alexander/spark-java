@@ -18,4 +18,8 @@ public class Filters {
     public static Boolean filterIdScore(Tuple2<Long, Double> idScore) {
         return allNotNull(idScore, idScore._1, idScore._2);
     }
+
+    public static boolean filterTuple2NonNullKeyValue(Tuple2<?,?> tuple2) {
+        return allNotNull(tuple2, tuple2._1, tuple2._2);
+    }
 }
