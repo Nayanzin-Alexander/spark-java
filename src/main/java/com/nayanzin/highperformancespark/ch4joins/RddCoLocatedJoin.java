@@ -24,15 +24,15 @@ OUTPUT=manual-run-results/CoreRddJoin/
 rm -r $OUTPUT
 spark-submit \
     --master    local[4] \
-    --name      CoLocatedJoin \
-    --class     com.nayanzin.highperformancespark.ch4joins.CoLocatedJoin  \
+    --name      RddCoLocatedJoin \
+    --class     com.nayanzin.highperformancespark.ch4joins.RddCoLocatedJoin  \
     --conf="spark.driver.memory=5G" \
     build/libs/spark-java-1.0-SNAPSHOT.jar  \
     $INPUT_ADDRESS \
     $INPUT_SCORES \
     $OUTPUT
  */
-public class CoLocatedJoin implements Serializable {
+public class RddCoLocatedJoin implements Serializable {
 
     public static void main(String[] args) {
         // Parse arguments

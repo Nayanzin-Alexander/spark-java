@@ -2,8 +2,6 @@ package com.nayanzin.highperformancespark.ch4joins;
 
 import com.nayanzin.highperformancespark.ch4joins.filter.Filters;
 import com.nayanzin.highperformancespark.ch4joins.mapper.Mappers;
-import org.apache.spark.HashPartitioner;
-import org.apache.spark.Partitioner;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.SparkSession;
@@ -22,14 +20,14 @@ OUTPUT=manual-run-results/CoreRddJoin/
 rm -r $OUTPUT
 spark-submit \
     --master    local[4] \
-    --name      KnownPartitionersJoin \
-    --class     com.nayanzin.highperformancespark.ch4joins.KnownPartitionersJoin \
-    build/libs/spark-java-1.0-SNAPSHOT.jar \
+    --name      RddReduceShuffleJoin \
+    --class     com.nayanzin.highperformancespark.ch4joins.RddReduceShuffleJoin  \
+    build/libs/spark-java-1.0-SNAPSHOT.jar  \
     $INPUT_ADDRESS \
     $INPUT_SCORES \
     $OUTPUT
  */
-public class KnownPartitionersJoin implements Serializable {
+public class RddReduceShuffleJoin implements Serializable {
 
     public static void main(String[] args) {
         // Parse arguments
@@ -54,13 +52,9 @@ public class KnownPartitionersJoin implements Serializable {
                 .mapToPair(Mappers::csvLineToIdScore)
                 .filter(Filters::filterIdScore);
 
-        // Get idNameAddress partitioner
-        Partitioner addressPartitioner = idNameAddress.partitioner()
-                .or(new HashPartitioner(idNameAddress.partitions().size()));
-
         setStageName(sc, "Reduce scores get max score by id, join with address and name and save");
         idScore
-                .reduceByKey(addressPartitioner, Double::max)
+                .reduceByKey(Double::max)
                 .join(idNameAddress)
                 .map(Mappers::idMaxScoreNameAddressToCsvLine)
                 .saveAsTextFile(outputAddressWithHighestScore);

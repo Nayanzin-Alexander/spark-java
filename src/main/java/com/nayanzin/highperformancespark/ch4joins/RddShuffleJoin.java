@@ -2,8 +2,8 @@ package com.nayanzin.highperformancespark.ch4joins;
 
 import com.nayanzin.highperformancespark.ch4joins.dto.PandaAddress;
 import com.nayanzin.highperformancespark.ch4joins.dto.PandaScore;
-import com.nayanzin.highperformancespark.ch4joins.service.CsvTransformer;
-import com.nayanzin.highperformancespark.ch4joins.service.JoinTransformer;
+import com.nayanzin.highperformancespark.ch4joins.service.RddCsvTransformer;
+import com.nayanzin.highperformancespark.ch4joins.service.RddJoinTransformer;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -22,14 +22,14 @@ OUTPUT=manual-run-results/CoreRddJoin/
 rm -r $OUTPUT
 spark-submit \
     --master    local[4] \
-    --name      ShuffleJoin \
-    --class     com.nayanzin.highperformancespark.ch4joins.ShuffleJoin \
+    --name      RddShuffleJoin \
+    --class     com.nayanzin.highperformancespark.ch4joins.RddShuffleJoin \
     build/libs/spark-java-1.0-SNAPSHOT.jar \
     $INPUT_ADDRESS \
     $INPUT_SCORES \
     $OUTPUT
  */
-public class ShuffleJoin implements Serializable {
+public class RddShuffleJoin implements Serializable {
     public static void main(String[] args) {
         // Parse arguments
         checkArgs(args, 3);
@@ -42,8 +42,8 @@ public class ShuffleJoin implements Serializable {
         JavaSparkContext sc = JavaSparkContext.fromSparkContext(spark.sparkContext());
 
         // Create service objects
-        CsvTransformer csvTransformer = new CsvTransformer();
-        JoinTransformer joinTransformer = new JoinTransformer();
+        RddCsvTransformer rddCsvTransformer = new RddCsvTransformer();
+        RddJoinTransformer joinTransformer = new RddJoinTransformer();
 
         // Read input csv files
         setStageName(sc, "Read input scores csv files");
@@ -54,10 +54,10 @@ public class ShuffleJoin implements Serializable {
 
         // Transform csv to Dto
         setStageName(sc, "Transform addresses to Dto");
-        JavaPairRDD<Long, PandaAddress> addresses = csvTransformer.getAddresses(addressesCsv);
+        JavaPairRDD<Long, PandaAddress> addresses = rddCsvTransformer.getAddresses(addressesCsv);
 
         setStageName(sc, "Transform scores to Dto");
-        JavaPairRDD<Long, PandaScore> scores = csvTransformer.getScores(scoresCsv);
+        JavaPairRDD<Long, PandaScore> scores = rddCsvTransformer.getScores(scoresCsv);
 
         // Join data and Save result
         setStageName(sc, "Join, save");

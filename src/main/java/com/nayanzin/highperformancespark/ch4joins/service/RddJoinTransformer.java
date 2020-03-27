@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 import static java.util.Objects.isNull;
 
-public class JoinTransformer implements Serializable {
+public class RddJoinTransformer implements Serializable {
     public JavaRDD<PandaCongratsDto> joinReduce(JavaPairRDD<Long, PandaAddress> addresses, JavaPairRDD<Long, PandaScore> scores) {
         return scores.join(addresses)
                 .mapToPair(t -> new Tuple2<>(t._1, Mappers.addressAndScoreToPandaCongratsDto(t._2._2, t._2._1)))

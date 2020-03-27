@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.entry;
 
 public class CsvTransformerTest extends SharedJavaSparkContext implements Serializable {
 
-    private CsvTransformer csvTransformer = new CsvTransformer();
+    private RddCsvTransformer rddCsvTransformer = new RddCsvTransformer();
 
     @Test
     public void pandaAddressTest() {
@@ -25,7 +25,7 @@ public class CsvTransformerTest extends SharedJavaSparkContext implements Serial
                 "0,address 0,Andy",
                 "1,address 1,Mandy",
                 "2,address 2,Sandy"), 200);
-        JavaPairRDD<Long, PandaAddress> addresses = csvTransformer.getAddresses(validPandaAddresses);
+        JavaPairRDD<Long, PandaAddress> addresses = rddCsvTransformer.getAddresses(validPandaAddresses);
         assertThat(addresses.collectAsMap()).containsOnly(
                         entry(0L, new PandaAddress(0L, "address 0", "Andy", null)),
                         entry(1L, new PandaAddress(1L, "address 1", "Mandy", null)),
@@ -42,7 +42,7 @@ public class CsvTransformerTest extends SharedJavaSparkContext implements Serial
                 "AA,0.23",
                 "4,AA",
                 "AA"), 200);
-        JavaPairRDD<Long, PandaScore> addresses = csvTransformer.getScores(validPandaScores);
+        JavaPairRDD<Long, PandaScore> addresses = rddCsvTransformer.getScores(validPandaScores);
         assertThat(addresses.collectAsMap()).containsOnly(
                 entry(0L, new PandaScore(0L, 2.3242D, null)),
                 entry(1L, new PandaScore(1L,23.11D, null)),
