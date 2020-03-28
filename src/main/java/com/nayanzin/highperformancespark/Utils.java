@@ -29,6 +29,10 @@ public final class Utils {
                 .getOrCreate();
     }
 
+    public static void setStageName(SparkSession spark, String name) {
+        setStageName(JavaSparkContext.fromSparkContext(spark.sparkContext()), name);
+    }
+
     public static void setStageName(JavaSparkContext sc, String name) {
         sc.setLocalProperty(CALL_SITE_SHORT, name);
     }

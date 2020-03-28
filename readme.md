@@ -32,3 +32,7 @@ https://github.com/databricks/spark-csv#features
 Spark History Server and monitoring jobs performance
 https://luminousmen.com/post/spark-history-server-and-monitoring-jobs-performance   
 https://stackoverflow.com/questions/39123314/how-to-add-custom-description-to-spark-job-for-displaying-in-spark-web-ui
+
+Parquet format presentation
+https://www.youtube.com/watch?v=_0Wpwj_gvzg
+https://www.youtube.com/watch?v=oaEOtQwdicg
