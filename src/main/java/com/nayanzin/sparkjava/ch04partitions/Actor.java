@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Actor {
-    private Long id;
+    private int id;
+    private int idPartition;
     private String name;
     private int year;
 }

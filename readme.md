@@ -42,3 +42,6 @@ https://stackoverflow.com/questions/39123314/how-to-add-custom-description-to-sp
 
 Parquet format presentation
 https://www.youtube.com/watch?v=_0Wpwj_gvzg
+
+Spark Hive datasource
+https://spark.apache.org/docs/latest/sql-data-sources-hive-tables.html

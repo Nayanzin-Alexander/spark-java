@@ -21,8 +21,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Output files are writen to build/resources/test/{testPackage}/{testClassName}/{methodName}
  */
 public class RDDSaveTest extends SharedJavaSparkContext implements Serializable {
-    private static final Path inputFile = getTestResource("/ch01basics/testData.txt");
-    private static final String outputDir = getTestResource("/ch01basics") + "/RDDSaveTest/";
+    private static final Path inputFile = getTestResource("/sparkjava/ch01basics/testData.txt");
+    private static final String outputDir = getTestResource("/sparkjava/ch01basics") + "/RDDSaveTest/";
 
     @BeforeClass
     public static void cleanUpPreviousGeneratedFiles() throws IOException {

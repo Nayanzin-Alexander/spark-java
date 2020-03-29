@@ -3,6 +3,7 @@
     $HADOOP_HOME/sbin/start-yarn.sh
     $HIVE_HOME/bin/schematool -dbType derby -initSchema
     $HIVE_HOME/bin/hiveserver2
+    docker run -v /tmp/spark-events:/tmp/spark-events -p 18080:18080 sparkhistoryserver
 # Stop services
     $HADOOP_HOME/sbin/stop-dfs.sh
     $HADOOP_HOME/sbin/stop-yarn.sh

@@ -8,3 +8,4 @@
 /src/test/resources/highperformancespark/ch4joins/scores_300mb.csv
 /src/test/resources/highperformancespark/ch4joins/parquet_addresses/
 /src/test/resources/highperformancespark/ch4joins/parquet_scores/
+/src/test/resources/sparkjava/ch04partitions/actors.csv

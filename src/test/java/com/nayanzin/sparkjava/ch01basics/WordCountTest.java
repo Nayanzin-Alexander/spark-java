@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class WordCountTest extends SharedJavaSparkContext {
 
-    private static final Path testResources = getTestResource("/ch01basics");
+    private static final Path testResources = getTestResource("/sparkjava/ch01basics");
     private static final Path testFilesDir = Paths.get(testResources.toString(), "/testFiles");
     private JavaRDD<String> inputRDD;
     private JavaPairRDD<String, Integer> wordsWithLength;

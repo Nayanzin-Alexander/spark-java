@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class DataSetTest extends JavaDatasetSuiteBase implements Serializable {
 
-    private static final Path inputFile = getTestResource("/ch03dataset/input.csv");
+    private static final Path inputFile = getTestResource("/sparkjava/ch03dataset/input.csv");
     private static final StructType csvSchema = createStructType(asList(
             createStructField("name", StringType, true),
             createStructField("age", IntegerType, true),
