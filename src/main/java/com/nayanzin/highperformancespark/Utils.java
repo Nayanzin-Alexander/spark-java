@@ -24,7 +24,7 @@ public final class Utils {
         }
         return SparkSession
                 .builder()
-                .enableHiveSupport()
+                //.enableHiveSupport()
                 .config(conf)
                 .getOrCreate();
     }

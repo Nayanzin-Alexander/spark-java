@@ -3,9 +3,9 @@ Useful links
 Install Spark on Ubuntu:  
 https://medium.com/beeranddiapers/installing-apache-spark-on-ubuntu-8796bfdd0861
 
-
 Install Hadoop on ubuntu   
 https://linuxconfig.org/how-to-install-hadoop-on-ubuntu-18-04-bionic-beaver-linux
+https://stackoverflow.com/questions/26540507/what-is-the-maximum-containers-in-a-single-node-cluster-hadoop - configure yarn
 
 Install Hive on ubuntu + Configure Hive to use Spark
 https://data-flair.training/blogs/apache-hive-installation/
