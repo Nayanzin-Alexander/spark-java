@@ -6,3 +6,5 @@
 /manual-run-results/
 /src/test/resources/highperformancespark/ch4joins/addresses_70mb.csv
 /src/test/resources/highperformancespark/ch4joins/scores_300mb.csv
+/src/test/resources/highperformancespark/ch4joins/parquet_addresses/
+/src/test/resources/highperformancespark/ch4joins/parquet_scores/

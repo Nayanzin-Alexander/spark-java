@@ -3,18 +3,25 @@ Useful links
 Install Spark on Ubuntu:  
 https://medium.com/beeranddiapers/installing-apache-spark-on-ubuntu-8796bfdd0861
 
+
+Install Hadoop on ubuntu   
+https://linuxconfig.org/how-to-install-hadoop-on-ubuntu-18-04-bionic-beaver-linux
+
+Install Hive on ubuntu + Configure Hive to use Spark
+https://data-flair.training/blogs/apache-hive-installation/
+https://cwiki.apache.org/confluence/display/Hive/Hive+on+Spark%3A+Getting+Started
+
 Hive Getting Started:  
 https://cwiki.apache.org/confluence/display/Hive/GettingStarted
-https://www.youtube.com/watch?v=rr17cbPGWGA   
 http://hortonworks.com/wp-content/uploads/2016/05/Hortonworks.CheatSheet.SQLtoHive.pdf
+https://www.youtube.com/watch?v=rr17cbPGWGA - Hive Tutorial
+https://www.youtube.com/watch?v=oaEOtQwdicg - Hive Partitioning and Bucketing
 
 Horton Hadoop Sandbox   
 https://www.cloudera.com/downloads/hortonworks-sandbox/hdp.html   
 https://www.cloudera.com/tutorials/learning-the-ropes-of-the-hdp-sandbox.html   
 https://www.cloudera.com/tutorials/getting-started-with-hdp-sandbox.html   
 
-Install Hadoop on ubuntu   
-https://linuxconfig.org/how-to-install-hadoop-on-ubuntu-18-04-bionic-beaver-linux
 
 Submitting application to Spark
 https://spark.apache.org/docs/latest/submitting-applications.html
@@ -35,4 +42,3 @@ https://stackoverflow.com/questions/39123314/how-to-add-custom-description-to-sp
 
 Parquet format presentation
 https://www.youtube.com/watch?v=_0Wpwj_gvzg
-https://www.youtube.com/watch?v=oaEOtQwdicg

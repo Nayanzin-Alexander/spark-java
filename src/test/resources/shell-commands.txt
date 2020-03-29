@@ -1,0 +1,8 @@
+# Start services
+    $HADOOP_HOME/sbin/start-dfs.sh
+    $HADOOP_HOME/sbin/start-yarn.sh
+    $HIVE_HOME/bin/schematool -dbType derby -initSchema
+    $HIVE_HOME/bin/hiveserver2
+# Stop services
+    $HADOOP_HOME/sbin/stop-dfs.sh
+    $HADOOP_HOME/sbin/stop-yarn.sh
