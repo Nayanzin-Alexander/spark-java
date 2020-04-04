@@ -3,6 +3,9 @@ Useful links
 Install Spark on Ubuntu:  
 https://medium.com/beeranddiapers/installing-apache-spark-on-ubuntu-8796bfdd0861
 
+How to set LD_LIBRARY_PATH in Ubuntu
+https://stackoverflow.com/questions/13428910/how-to-set-the-environmental-variable-ld-library-path-in-linux
+
 Install Hadoop on ubuntu   
 https://linuxconfig.org/how-to-install-hadoop-on-ubuntu-18-04-bionic-beaver-linux
 https://stackoverflow.com/questions/26540507/what-is-the-maximum-containers-in-a-single-node-cluster-hadoop - configure yarn
@@ -16,6 +19,7 @@ https://cwiki.apache.org/confluence/display/Hive/GettingStarted
 http://hortonworks.com/wp-content/uploads/2016/05/Hortonworks.CheatSheet.SQLtoHive.pdf
 https://www.youtube.com/watch?v=rr17cbPGWGA - Hive Tutorial
 https://www.youtube.com/watch?v=oaEOtQwdicg - Hive Partitioning and Bucketing
+
 
 Horton Hadoop Sandbox   
 https://www.cloudera.com/downloads/hortonworks-sandbox/hdp.html   
@@ -45,3 +49,6 @@ https://www.youtube.com/watch?v=_0Wpwj_gvzg
 
 Spark Hive datasource
 https://spark.apache.org/docs/latest/sql-data-sources-hive-tables.html
+
+Spark books
+https://jaceklaskowski.gitbooks.io/mastering-spark-sql/spark-sql-bucketing.html

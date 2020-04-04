@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 import static java.util.Arrays.asList;
 import static org.apache.spark.sql.RowFactory.create;
-import static org.apache.spark.sql.functions.col;
+import static org.apache.spark.sql.functions.*;
 import static org.apache.spark.sql.types.DataTypes.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -44,9 +44,12 @@ public class CastingTest extends JavaDataFrameSuiteBase implements Serializable 
                 create("name2", "2")), SCHEMA);
         Dataset<Row> dfWithNumberInt = df
                 .withColumn("number_int", col("number").cast(IntegerType))
+                .withColumn("conditional", when(col("name").equalTo("name1"), 1).otherwise(0))
                 .drop("number");
         assertThat(dfWithNumberInt.collectAsList()).containsExactlyInAnyOrder(
-                create("name1", 1),
-                create("name2", 2));
+                create("name1", 1, 1),
+                create("name2", 2, 0));
+
+        df.agg(countDistinct(col("name"))).show();
     }
 }
