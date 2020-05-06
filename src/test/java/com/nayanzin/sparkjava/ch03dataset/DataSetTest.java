@@ -4,10 +4,7 @@ import com.holdenkarau.spark.testing.JavaDatasetSuiteBase;
 import org.apache.spark.api.java.function.FilterFunction;
 import org.apache.spark.api.java.function.MapFunction;
 import org.apache.spark.broadcast.Broadcast;
-import org.apache.spark.sql.Column;
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Encoder;
-import org.apache.spark.sql.Encoders;
+import org.apache.spark.sql.*;
 import org.apache.spark.sql.types.DecimalType;
 import org.apache.spark.sql.types.StructType;
 import org.junit.Test;
@@ -22,20 +19,30 @@ import static java.math.BigDecimal.valueOf;
 import static java.util.Arrays.asList;
 import static java.util.Optional.ofNullable;
 import static org.apache.spark.sql.Encoders.INT;
+import static org.apache.spark.sql.RowFactory.create;
+import static org.apache.spark.sql.functions.coalesce;
+import static org.apache.spark.sql.functions.col;
 import static org.apache.spark.sql.types.DataTypes.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DataSetTest extends JavaDatasetSuiteBase implements Serializable {
 
     private static final Path inputFile = getTestResource("/sparkjava/ch03dataset/input.csv");
+
     private static final StructType csvSchema = createStructType(asList(
             createStructField("name", StringType, true),
             createStructField("age", IntegerType, true),
             createStructField("state", StringType, true),
             createStructField("salary", DecimalType.apply(15, 5), true)));
+
+    private static final StructType SCHEMA = createStructType(asList(
+            createStructField("key", StringType, true),
+            createStructField("value", IntegerType, true)));
+
     private static final Encoder<Person> asPersonEncoder = Encoders.bean(Person.class);
     private static final Encoder<AgeGroup> asAgeGroupEncoder = Encoders.bean(AgeGroup.class);
     private static final Encoder<PersonWithAgeGroupInfo> asPersonWithAgeGroupInfoEncoder = Encoders.bean(PersonWithAgeGroupInfo.class);
+
 
     @Test
     public void readFromCsvTest() {
@@ -172,5 +179,34 @@ public class DataSetTest extends JavaDatasetSuiteBase implements Serializable {
 
         Dataset<Integer> outerJoin = union.except(intersection);
         assertThat(outerJoin.collectAsList()).containsExactlyInAnyOrder(0, 1, 2, 5, 6, 7);
+    }
+
+    @Test
+    public void fullJoinTest() {
+        Dataset<Row> df1 = spark().createDataFrame(asList(
+                create("key_1", 1),
+                create("key_2", 2),
+                create("key_3", 3)), SCHEMA);
+
+        Dataset<Row> df2 = spark().createDataFrame(asList(
+                create("key_2", 200),
+                create("key_3", 300),
+                create("key_4", 400)), SCHEMA)
+                .withColumnRenamed("key", "df2_key")
+                .withColumnRenamed("value", "df2_value");
+
+        Dataset<Row> fullJoined = df1.join(
+                df2,
+                col("key").equalTo(col("df2_key")),
+                "outer")
+                .withColumn("key", coalesce(col("key"), col("df2_key")))
+                .na().fill(0, new String[]{"value", "df2_value"})
+                .drop("df2_key");
+
+        assertThat(fullJoined.collectAsList()).containsExactlyInAnyOrder(
+                create("key_1", 1, 0),
+                create("key_2", 2, 200),
+                create("key_3", 3, 300),
+                create("key_4", 0, 400));
     }
 }

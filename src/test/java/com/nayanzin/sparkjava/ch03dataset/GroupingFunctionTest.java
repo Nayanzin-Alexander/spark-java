@@ -25,7 +25,7 @@ public class GroupingFunctionTest extends JavaDataFrameSuiteBase implements Seri
             createStructField("salary", DecimalType.apply(10, 5), false)));
 
     @Test
-    public void companyMinMaxSalaryTest() {
+    public void companyMinMaxAvgSumSalaryTest() {
         Dataset<Row> df = spark().createDataFrame(asList(
                 create(1L, 1L, BigDecimal.valueOf(100L)),
                 create(2L, 1L, BigDecimal.valueOf(50L)),
@@ -47,5 +47,18 @@ public class GroupingFunctionTest extends JavaDataFrameSuiteBase implements Seri
                 create(1L, new BigDecimal("10.00000"), new BigDecimal("100.00000"), new BigDecimal("53.333333333"), new BigDecimal("160.00000")),
                 create(2L, new BigDecimal("200.00000"), new BigDecimal("200.00000"), new BigDecimal("200.00000"), new BigDecimal("200.00000"))
         );
+    }
+
+    @Test
+    public void nullFieldSum() {
+        Dataset<Row> df = spark().createDataFrame(asList(
+                create(1L, 1L, null),
+                create(2L, 1L, null),
+                create(3L, null, null),
+                create(4L, null, null),
+                create(5L, 3L, null)), SCHEMA);
+        long actualSum = df.agg(sum("company_id"))
+                .collectAsList().get(0).getLong(0);
+        assertThat(actualSum).isEqualTo(5L);
     }
 }

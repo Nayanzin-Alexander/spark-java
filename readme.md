@@ -52,3 +52,11 @@ https://spark.apache.org/docs/latest/sql-data-sources-hive-tables.html
 
 Spark books
 https://jaceklaskowski.gitbooks.io/mastering-spark-sql/spark-sql-bucketing.html
+https://medium.com/@ntnmathur/cluster-by-and-clustered-by-in-spark-sql-9af7f8b80978 - CLUSTER BY and CLUSTERED BY
+
+Git - how to squach commits on remote brach
+https://stackoverflow.com/questions/5667884/how-to-squash-commits-in-git-after-they-have-been-pushed
+```git checkout my_branch
+   git reset --soft HEAD~4
+   git commit
+   git push --force origin my_branch```

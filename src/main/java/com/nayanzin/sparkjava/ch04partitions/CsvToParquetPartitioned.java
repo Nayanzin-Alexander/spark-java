@@ -28,7 +28,7 @@ spark-submit \
  */
 public class CsvToParquetPartitioned {
 
-     public static final String ID_PARTITION = "idPartition";
+     public static final String RIC_PARTITION_UDF = "idPartition";
 
      public static void main(String[] args) {
 
@@ -50,11 +50,12 @@ public class CsvToParquetPartitioned {
                   .csv(args[0])
                   .repartition(1000)  // imitate many input files
 
-                  .withColumn(ID_PARTITION, callUDF("getIdPartition", col("id").cast(IntegerType)))
+                  .withColumn(RIC_PARTITION_UDF, callUDF("getIdPartition", col("id").cast(IntegerType)))
                   .as(Encoders.bean(Actor.class))
-                  .repartition(numberOfOutputFiles, col("year"), col(ID_PARTITION))
+
+                  .repartition(numberOfOutputFiles, col("year"), col(RIC_PARTITION_UDF))
                   .write()
-                  .partitionBy("year", ID_PARTITION)
+                  .partitionBy("year", RIC_PARTITION_UDF)
                   .parquet(args[1]);
      }
 
