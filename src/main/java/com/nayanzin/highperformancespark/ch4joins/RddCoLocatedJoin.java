@@ -12,8 +12,8 @@ import scala.Tuple2;
 import java.util.Collections;
 import java.util.Map;
 
-import static com.nayanzin.highperformancespark.Utils.buildSparkSession;
-import static com.nayanzin.highperformancespark.Utils.setStageName;
+import static com.nayanzin.highperformancespark.utils.Utils.buildSparkSession;
+import static com.nayanzin.highperformancespark.utils.Utils.setStageName;
 import static java.util.Objects.isNull;
 
 /*

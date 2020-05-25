@@ -1,6 +1,6 @@
 package com.nayanzin.highperformancespark.ch4joins.tool;
 
-import com.nayanzin.highperformancespark.Utils;
+import com.nayanzin.highperformancespark.utils.Utils;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.api.java.UDF1;
 

@@ -12,7 +12,7 @@ import scala.Serializable;
 
 import java.util.Collections;
 
-import static com.nayanzin.highperformancespark.Utils.*;
+import static com.nayanzin.highperformancespark.utils.Utils.*;
 
 /*
 Usage:

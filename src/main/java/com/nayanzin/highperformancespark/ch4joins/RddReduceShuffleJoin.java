@@ -10,7 +10,7 @@ import scala.Tuple2;
 
 import java.util.Collections;
 
-import static com.nayanzin.highperformancespark.Utils.*;
+import static com.nayanzin.highperformancespark.utils.Utils.*;
 
 /*
 Usage:

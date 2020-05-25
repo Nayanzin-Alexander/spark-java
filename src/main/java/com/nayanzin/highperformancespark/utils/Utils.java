@@ -1,4 +1,4 @@
-package com.nayanzin.highperformancespark;
+package com.nayanzin.highperformancespark.utils;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
