@@ -12,6 +12,7 @@ import scala.reflect.ClassTag;
 import scala.reflect.ClassTag$;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -141,6 +142,32 @@ public class PairRDDTransformationsTest extends SharedJavaSparkContext implement
         JavaRDDComparisons.assertRDDEquals(
                 fromRDD(toRDD(actualCountOfOddNumbersPerKey), tag),
                 fromRDD(toRDD(expectedCountOfOddNumbersPerKey), tag));
+    }
+
+    @Test
+    public void aggregateTest() {
+        JavaPairRDD<String, Integer> dataset = jsc().parallelizePairs(asList(
+                new Tuple2<>("Key1", 1),
+                new Tuple2<>("Key1", 2),
+                new Tuple2<>("Key1", 3),
+                new Tuple2<>("Key1", 4),
+                new Tuple2<>("Key1", 5),
+                new Tuple2<>("Key2", 1),
+                new Tuple2<>("Key2", 3),
+                new Tuple2<>("Key2", 5),
+                new Tuple2<>("Key2", 7),
+                new Tuple2<>("Key2", 9))).repartition(100);
+        Map<String, Integer> actualCountOfOddNumbersPerKey = dataset.aggregate(
+                new HashMap<>(),
+                (map, val) -> {
+                    map.put(val._1, val._2);
+                    return map;
+                },
+                (left, right) -> {
+                    left.putAll(right);
+                    return left;
+                });
+        System.out.println(actualCountOfOddNumbersPerKey);
     }
 
     @Test

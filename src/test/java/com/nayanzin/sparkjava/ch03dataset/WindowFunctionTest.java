@@ -59,6 +59,8 @@ public class WindowFunctionTest extends JavaDataFrameSuiteBase implements Serial
                 create(Date.valueOf("2019-02-15"), "large phone", BigDecimal.valueOf(700.00), BigDecimal.valueOf(700)),
                 create(Date.valueOf("2019-07-01"), "camera", BigDecimal.valueOf(300.00), BigDecimal.valueOf(225)),
                 create(Date.valueOf("2019-04-01"), "small phone", BigDecimal.valueOf(50.00), BigDecimal.valueOf(150)));
+
+        withAveragePriceForDeviceGroup.explain();
     }
 
     @Test
