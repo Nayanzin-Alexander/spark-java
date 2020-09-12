@@ -60,3 +60,6 @@ https://stackoverflow.com/questions/5667884/how-to-squash-commits-in-git-after-t
    git reset --soft HEAD~4
    git commit
    git push --force origin my_branch```
+
+todo
+https://medium.com/teads-engineering/lessons-learned-while-optimizing-spark-aggregation-jobs-f93107f7867f

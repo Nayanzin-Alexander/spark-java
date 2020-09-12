@@ -1,6 +1,6 @@
 package com.nayanzin.sparkjava.ch04partitions;
 
-import com.nayanzin.highperformancespark.Utils;
+import com.nayanzin.highperformancespark.utils.Utils;
 import org.apache.spark.HashPartitioner;
 import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.SparkSession;
